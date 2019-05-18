@@ -2,6 +2,7 @@
 
 int main(void)
 {
-  printf("Hello World !!!");
+  printf("Ad: Özge Belgül\n");
+   printf("No: 040170067");
   return 1;
 }
