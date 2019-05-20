@@ -1,0 +1,107 @@
+#include<stdio.h>
+#include <stdlib.h>
+
+//using namespace std;
+
+struct node {
+	float lat;
+	float longi;
+	float temp;
+	float hash;
+	struct node *next;
+};
+
+
+struct node *head = NULL;
+int size= 0;
+void add_node(float,float,float);
+void sort();
+void print_nodes();
+
+
+
+int main(){
+	FILE *file;
+	
+	file = fopen("veri.txt","r");
+	char line[30];
+	
+	float latitude;
+	float longitude;
+	float temperature;
+	while(fgets (line, sizeof(line),file)){
+		sscanf(line,"%f %f %f",&latitude, &longitude, &temperature);
+		add_node(latitude,longitude,temperature);
+	}
+	sort();
+	print_nodes();
+}
+
+void add_node(float latitude, float longitude, float temperature) {
+   struct node *t, *temp;
+   
+   t = (struct node*)malloc(sizeof(struct node));
+   size++;
+   
+   if (head == NULL) {
+      head = t;
+      head->lat = latitude;
+      head->longi = longitude;
+      head->temp = temperature;
+      head->hash = ((int)abs(latitude*1e6+longitude*1e6))%1000;
+      head->next = NULL;
+      return;
+   }
+   
+   temp = head;
+   
+   while (temp->next != NULL){
+      temp = temp->next;
+   }
+   temp->next = t;
+   t->lat    = latitude;
+   t->longi = longitude;
+   t->temp = temperature;
+   t->hash = ((int)abs(latitude*1e6+longitude*1e6))%1000;
+   t->next    = NULL;
+}
+
+void sort(){
+	struct node *traverse, *temp;	
+	int turn = 0;
+	int i;
+	traverse = head;
+	temp = head;
+	while(temp != NULL){
+		traverse = temp;
+		while(traverse != NULL){
+			if(traverse->hash > temp->hash){
+				//printf("need to change %f %f\n",temp->hash,traverse->hash);
+				float latitude = traverse->lat;
+				float longitude = traverse->longi;
+				float temperature = traverse->temp;
+				float hash = traverse->hash; 
+				traverse->lat = temp->lat;
+				traverse->longi = temp->longi;
+				traverse->temp = temp->temp;
+				traverse->hash = temp->hash;
+				temp->lat = latitude;
+				temp->longi = longitude;
+				temp->temp = temperature;
+				temp->hash = hash;
+			}
+			traverse = traverse->next;
+		}
+		temp = temp->next;
+	}
+}
+
+
+void print_nodes(){
+	struct node *temp;
+	temp = head;
+	while (temp != NULL){
+		printf("%f %f %f %f\n",temp->lat,temp->longi,temp->temp,temp->hash);
+   		temp = temp->next;
+   }
+}
