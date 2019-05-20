@@ -1,0 +1,134 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define EXIT 0
+#define CONTINUE 1
+int main(){	
+    char choice;	char choice1;			int hours;				int product;
+    int choice2;	float sumSalary;		int price;				int cont = CONTINUE;
+    int choice3;	int workersalary;		int pieceworkers;
+    int managers;	int i;					int pieceworkersalary;
+    int workers;	int comission;			int exit;
+    char name[100];	float comissionsalary;
+
+    printf ("Welcome to payment system\n\n");
+
+do{
+        printf("Are you [P]ayroll Clerk or [E]mployee\n");
+
+        scanf(" %c",&choice1);
+
+        switch(choice1){
+            case'E':case'e':
+                printf("Please choose your own paycode from below.\n\n [1] for Managers\n [2] for Hourly Workers\n [3] for Commission Workers\n [4] for Pieceworkers.\n");
+                scanf("%d",&choice2);
+                if(choice2==1)
+                    printf("Your salary is fixed at $1800 per week.");
+                else if(choice2==2)
+                    printf("You get $20 per hour, up to 40 hours (For overtime, 1.5 times the hourly salary.)\n");
+                else if(choice2==3)
+                    printf("Your salary is $250 + 5.7 percent of each sold product.\n");
+                else if(choice2==4)
+                    printf("you will get $8 per piece you produce.\n");
+                else
+                    printf("Are you sure you know how to read? You had to enter a value 1-4. Please go for now and come back when you sober.");
+                break;
+            case'P':case'p':
+                printf("Which workers group will you pay for? Please select from below.\n\n [1] for Managers\n [2] for Hourly Workers\n [3] for Commission Workers\n [4] for Pieceworkers.\n");
+                scanf("%d",&choice3);
+                if(choice3==1
+				){
+                    printf("How many managers will you pay?\n");
+                    scanf("%d",&managers);
+                    printf("You will pay $%d in total.($1800 per manager.)",managers*1800);
+                }
+                else if(choice3==2)
+				{
+                    printf("How many workers will you pay?\n");
+                    scanf("%d",&workers);
+                    sumSalary=0;
+                    for(i=0;i<workers;i++){
+                        workersalary=0;
+                        printf("Enter name of the worker.\n");
+                        scanf("%s",&name);
+                        printf("%s how many hours worked?\n",name);
+                        scanf("%d",&hours);
+                        if(hours<=40)
+						{
+                            workersalary+=hours*20;
+                            sumSalary+=hours*20;
+                            printf("For %s, You will pay %d dollars.\n",name, workersalary);
+                        }
+                        else
+						{
+                        sumSalary+=(40*20)+((hours-40)*30);
+                        workersalary+=(40*20)+((hours-40)*30);
+                        printf("For %s, You will pay %d dollars.\n\n",name, workersalary);
+                        }
+                    }
+                    printf("You will pay %.1f in total for all Hourly Workers.",sumSalary);
+                }
+                else if(choice3==3)
+				{
+                    printf("How many comission workers will you pay?\n");
+                    scanf("%d",&comission);
+                    sumSalary=0;
+                    for(i=0;i<comission;i++)
+					{
+                        comissionsalary=0;
+                        printf("Enter name of the worker.\n");
+                        scanf("%s",&name);
+                        printf("How many products has been sold by %s?\n",name);
+                        scanf("%d",&product);
+                        printf("What was the price of the product?\n");
+                        scanf("%d",&price);
+                        sumSalary+=(250)+((price*5.7)/100);
+                        comissionsalary+=250+(product*price*5.7)/100;
+                        printf("For %s, You will pay %.2f dollars.\n\n",name, comissionsalary);
+                    }
+                printf("You will pay %.2f in total for all Comission Workers.\n",sumSalary);
+                }
+                else if(choice3==4){
+                    printf("How many pieceworkers will you pay?\n");
+                    scanf("%d",&pieceworkers);
+                    sumSalary=0;
+                    for(i=0;i<pieceworkers;i++)
+					{
+                        pieceworkersalary=0;
+                        printf("Enter name of the worker.\n");
+                        scanf("%s",&name);
+                        printf("How many products has been produced by %s?\n",name);
+                        scanf("%d",&product);
+                        printf("What was the price of the item?\n");
+                        scanf("%d",&price);
+                        sumSalary+=product*price;
+                        pieceworkersalary+=product*price;
+                        printf("For %s, You will pay %d dollars.\n\n",name, pieceworkersalary);
+                	}
+                printf("You will pay %.2f in total for all Comission Workers.\n",sumSalary);
+                }
+                else
+				{
+                	printf("There is no such a thing");
+				}
+                break;
+            default:
+                printf("Are you sure you know how to read? You had to enter a value 1-4. Please go for now and come back when you sober.");
+        }
+       	
+		printf("\nDo you want to continue? [y/n]:");
+		scanf(" %c",&choice);
+		cont = (choice == 'y') ? CONTINUE : EXIT;
+    }while(cont);
+	
+	printf("\nAre you sure that? [y/n]: ");
+	scanf(" %c",&choice);
+	if(choice=='y')
+	{
+		printf("\nOk. Kib. Bye.s.s");
+	}else
+	{
+		printf("Please go for now and come back when you sober.\n");
+	}
+       
+        return 0;
+    }
