@@ -1,0 +1,143 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define  TABLE_SIZE 2000
+
+typedef struct node {
+	
+	float latitude;
+	float longitude;
+	float temperature;
+	int hashValue;
+	
+	struct node* next;
+	
+	} node_t;
+	
+	node_t *hashTable[2000]; //Global Hash Table
+	
+	void CreateHashTable(void){
+		
+		int k;
+		for(k=0;k<2000;k++){
+			
+			hashTable[k]=NULL;
+		}
+	}		
+
+	void add_end(node_t * head,int hashValue ,float latitude,float longitude,float temperature )
+{
+	node_t* current = head;
+
+	while (current->next != NULL)
+	{
+		current = current->next;
+	}
+
+	/* now we can add a new variable */
+	current->next = malloc(sizeof(node_t));
+	current->next->hashValue=hashValue;
+	current->next->latitude=latitude;
+	current->next->longitude=longitude;
+	current->next->temperature=temperature;
+	current->next->next = NULL;
+}
+	
+
+int CalculateHash( float latitude,float longitude) {
+	float temp;
+	int hash;
+	temp = latitude * 1e6 + longitude * 1e6;	
+	hash = ((int)abs(temp)) % 1080;	
+	return hash;
+}
+
+void print_list(node_t * head)
+{
+	node_t * current = head;
+	int i=1;
+
+	while (current != NULL) {
+		
+		printf("%d %f %f %f\n", current->hashValue,current->latitude,current->longitude,current->temperature);
+		current = current->next;
+		i++;
+	}
+}
+
+int main (){
+	
+	node_t *head=NULL;
+	
+	FILE *fp;
+	
+	char line[256];
+	
+	int i;
+	
+	int hashValue=0;
+	
+	float lat,longi,temp;
+	
+	CreateHashTable();	//hash table ı mainde oluşturdum
+			
+		fp=fopen("veri.txt", "r");
+				
+				if (fp==NULL){
+	
+	  			printf("Dosya Bulunamadı !");
+				
+				}
+				else {
+	
+			while (!feof(fp)){
+			
+				fgets(line,256,fp);
+			
+				sscanf_s(line,"%f %f %f",&lat,&longi,&temp); 
+				
+				hashValue = CalculateHash(lat,longi)
+				
+				printf("Hash: %d \n Latitude: %f \n Longitude: %f\n Temp: %f \n", hashValue,lat,longi,temp); 
+				
+					if(hashTable[hashValue] == NULL){	
+						hashTable[hashValue]=malloc(sizeof(node_t));
+						hashTable[hashValue]->hashValue=hashValue;					
+						hashTable[hashValue]->latitude=lat;
+						hashTable[hashValue]->longitude=longi;
+						hashTable[hashValue]->temperature=temp;
+						hashTable[hashValue]->next = NULL;
+						
+					}
+					
+					else{	
+						add_end(hashTable[hashValue],hashValue,lat,longi,temp);
+					}
+									
+		}}
+		fclose(fp);
+				
+		printf("Liste oluşturuldu...\n");
+	
+	for (i = 0; i < 2000; i++)
+	{
+		
+		if (hashTable[i] == NULL)
+		{
+			
+			printf("%d indeks kullanilmiyor !!! \n", i);
+			
+		}
+		else
+		{
+			
+			printf("%d indeksli elemanin degerleri :\n", i);
+			print_list(hashTable[i]);
+		}
+		printf("\n--------------------------------------------------\n");
+	}					
+	return 0;
+}
+	
+
+}
