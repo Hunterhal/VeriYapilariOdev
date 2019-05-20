@@ -1,7 +1,25 @@
-#include <stdio.h>
+#include<stdio.h>
 
-int main(void)
-{
-	printf("Hello Halil !!!");
-  return 1;
+int deneme(int sayi){
+	
+	int fact=1;
+	
+	for (; sayi>0; sayi--){
+		fact = fact*sayi;
+	}
+	
+	return fact;
+}
+
+
+int main(){
+	
+	int x;
+	
+	printf("faktoriyelinin alinmasini istediginiz sayiyi girin: ");
+	scanf("%d", &x);
+		
+	printf("bu sayinin faktoriyeli: %d", deneme(x));
+	
+	return 0;
 }
